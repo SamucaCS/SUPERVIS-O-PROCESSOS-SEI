@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resultados – SEI dos Termos de Visita (Supervisão)</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #111827;
+            --muted: #94a3b8;
+            --text: #e5e7eb;
+            --accent: #22d3ee;
+            --danger: #ef4444;
+            --radius: 16px
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0
+        }
+
+        body {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+            background: linear-gradient(135deg, #0b1025 0%, #0f172a 40%, #0b2530 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 24px
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 0 auto
+        }
+
+        header {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 12px
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            margin: 0
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, .12));
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: var(--radius);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+            margin-bottom: 16px
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 12px;
+            border-top: 1px solid rgba(255, 255, 255, .1)
+        }
+
+        .toolbar .grow {
+            flex: 1
+        }
+
+        input,
+        select {
+            background: #0b1226;
+            border: 1px solid rgba(255, 255, 255, .1);
+            color: var(--text);
+            padding: 10px;
+            border-radius: 12px
+        }
+
+        .pill {
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #0c1a34;
+            border: 1px solid rgba(255, 255, 255, .12);
+            font-size: .78rem
+        }
+
+        .table-wrap {
+            overflow: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            padding: 12px
+        }
+
+        thead th {
+            font-size: .8rem;
+            color: var(--muted);
+            text-align: left;
+            font-weight: 600;
+            padding: 0 12px;
+            white-space: nowrap
+        }
+
+        tbody tr {
+            background: #0b1226;
+            border: 1px solid rgba(255, 255, 255, .06)
+        }
+
+        tbody td {
+            padding: 12px;
+            border-top: 1px solid rgba(255, 255, 255, .06);
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+            vertical-align: top
+        }
+
+        tbody td:first-child {
+            border-left: 1px solid rgba(255, 255, 255, .06);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px
+        }
+
+        tbody td:last-child {
+            border-right: 1px solid rgba(255, 255, 255, .06);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap
+        }
+
+        button,
+        .btn {
+            border: 0;
+            cursor: pointer;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 700
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none
+        }
+
+        .btn-secondary {
+            background: #0b1226;
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, .15)
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff
+        }
+
+        .btn-small {
+            padding: 6px 9px;
+            font-weight: 600
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 20px;
+            border-top: 1px dashed rgba(255, 255, 255, .18)
+        }
+
+        /* modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 999
+        }
+
+        .modal.open {
+            display: flex
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 620px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(0, 0, 0, .18));
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .5);
+            padding: 16px
+        }
+
+        .modal-card h2 {
+            margin: 0 0 8px;
+            font-size: 1.05rem
+        }
+
+        .grid {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(12, 1fr)
+        }
+
+        .col-12 {
+            grid-column: span 12
+        }
+
+        .col-6 {
+            grid-column: span 6
+        }
+
+        label {
+            display: block;
+            font-size: .85rem;
+            color: var(--muted)
+        }
+
+        .field input {
+            width: 100%;
+            background: #0b1226;
+            border: 1px solid rgba(255, 255, 255, .15);
+            color: var(--text);
+            padding: 10px;
+            border-radius: 12px
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 10px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Resultados – SEI dos Termos de Visita (Supervisão)</h1>
+            <div class="actions">
+                <a class="btn btn-secondary" href="./supervisao-form.html">Cadastrar novo</a>
+                <button id="printPage" class="btn-secondary">Imprimir</button>
+                <button id="exportCsv" class="btn-secondary">Exportar CSV</button>
+            </div>
+        </header>
+
+        <section class="card">
+            <div class="toolbar">
+                <div class="grow">
+                    <input id="q" type="search" placeholder="Filtrar por supervisor, unidade ou SEI..."
+                        aria-label="Filtro de busca" />
+                </div>
+                <span id="counter" class="pill">0 registros</span>
+            </div>
+            <div class="table-wrap">
+                <table aria-describedby="counter">
+                    <thead>
+                        <tr>
+                            <th>Supervisor</th>
+                            <th>Unidade 1</th>
+                            <th>Unidade 2</th>
+                            <th>Unidade 3</th>
+                            <th>Unidade 4 (opcional)</th>
+                            <th>Unidade 5 (opcional)</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+                <div id="empty" class="empty">Nenhum registro cadastrado.</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+        <div class="modal-card">
+            <h2 id="editTitle">Editar registro</h2>
+            <div class="grid">
+                <div class="col-12 field">
+                    <label for="f_supervisor">Supervisor</label>
+                    <input id="f_supervisor" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u1_nome">Unidade 1 (nome)</label>
+                    <input id="f_u1_nome" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u1_sei">Unidade 1 (SEI)</label>
+                    <input id="f_u1_sei" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u2_nome">Unidade 2 (nome)</label>
+                    <input id="f_u2_nome" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u2_sei">Unidade 2 (SEI)</label>
+                    <input id="f_u2_sei" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u3_nome">Unidade 3 (nome)</label>
+                    <input id="f_u3_nome" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u3_sei">Unidade 3 (SEI)</label>
+                    <input id="f_u3_sei" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u4_nome">Unidade 4 (nome)</label>
+                    <input id="f_u4_nome" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u4_sei">Unidade 4 (SEI)</label>
+                    <input id="f_u4_sei" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u5_nome">Unidade 5 (nome)</label>
+                    <input id="f_u5_nome" type="text" />
+                </div>
+                <div class="col-6 field">
+                    <label for="f_u5_sei">Unidade 5 (SEI)</label>
+                    <input id="f_u5_sei" type="text" />
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="btnCancel" class="btn btn-secondary">Cancelar</button>
+                <button id="btnSave" class="btn btn-secondary">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const $ = (s, scope = document) => scope.querySelector(s);
+        const $$ = (s, scope = document) => Array.from(scope.querySelectorAll(s));
+        const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
+        const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
+        const K_SUP = 'sei-termos-v1';
+
+        if (!load(K_SUP, null)) save(K_SUP, { items: [] });
+
+        const els = {
+            q: $('#q'), counter: $('#counter'), tbody: $('#tbody'), empty: $('#empty')
+        };
+
+        // modal
+        const modal = $('#editModal');
+        const f = {
+            supervisor: $('#f_supervisor'),
+            u1_nome: $('#f_u1_nome'), u1_sei: $('#f_u1_sei'),
+            u2_nome: $('#f_u2_nome'), u2_sei: $('#f_u2_sei'),
+            u3_nome: $('#f_u3_nome'), u3_sei: $('#f_u3_sei'),
+            u4_nome: $('#f_u4_nome'), u4_sei: $('#f_u4_sei'),
+            u5_nome: $('#f_u5_nome'), u5_sei: $('#f_u5_sei'),
+        };
+        const btnCancel = $('#btnCancel'), btnSave = $('#btnSave');
+        let ctx = null; // { index }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/\"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function fmtUnit(nome, sei) {
+            if (!nome && !sei) return '—';
+            return `<strong>${escapeHtml(nome || '')}</strong><br/><small>${escapeHtml(sei || '')}</small>`;
+        }
+
+        function render() {
+            const state = load(K_SUP, { items: [] });
+
+            const q = (els.q.value || '').toLowerCase().trim();
+            const rows = state.items
+                .map((it, idx) => ({ it, idx }))
+                .filter(({ it }) => {
+                    if (!q) return true;
+                    const blob = [
+                        it.supervisor, it.u1_nome, it.u1_sei, it.u2_nome, it.u2_sei,
+                        it.u3_nome, it.u3_sei, it.u4_nome, it.u4_sei, it.u5_nome, it.u5_sei
+                    ].join(' ').toLowerCase();
+                    return blob.includes(q);
+                })
+                .sort((a, b) => (a.it.createdAt || '').localeCompare(b.it.createdAt || ''));
+
+            els.tbody.innerHTML = '';
+            rows.forEach(({ it, idx }) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+          <td>${escapeHtml(it.supervisor)}</td>
+          <td>${fmtUnit(it.u1_nome, it.u1_sei)}</td>
+          <td>${fmtUnit(it.u2_nome, it.u2_sei)}</td>
+          <td>${fmtUnit(it.u3_nome, it.u3_sei)}</td>
+          <td>${fmtUnit(it.u4_nome, it.u4_sei)}</td>
+          <td>${fmtUnit(it.u5_nome, it.u5_sei)}</td>
+          <td>
+            <div class="actions">
+              <button class="btn-small btn-secondary" data-cmd="edit" data-index="${idx}">Editar</button>
+              <button class="btn-small btn-danger" data-cmd="del" data-index="${idx}">Excluir</button>
+            </div>
+          </td>`;
+                els.tbody.appendChild(tr);
+            });
+
+            els.empty.style.display = rows.length ? 'none' : 'block';
+            els.counter.textContent = `${rows.length} registros`;
+        }
+
+        // eventos de filtro
+        els.q.addEventListener('input', render);
+
+        // delegação para ações
+        els.tbody.addEventListener('click', (ev) => {
+            const btn = ev.target.closest('[data-cmd]');
+            if (!btn) return;
+            const idx = Number(btn.getAttribute('data-index'));
+            const cmd = btn.getAttribute('data-cmd');
+            const state = load(K_SUP, { items: [] });
+
+            if (cmd === 'edit') {
+                const it = state.items[idx];
+                if (!it) return;
+                f.supervisor.value = it.supervisor || '';
+                f.u1_nome.value = it.u1_nome || ''; f.u1_sei.value = it.u1_sei || '';
+                f.u2_nome.value = it.u2_nome || ''; f.u2_sei.value = it.u2_sei || '';
+                f.u3_nome.value = it.u3_nome || ''; f.u3_sei.value = it.u3_sei || '';
+                f.u4_nome.value = it.u4_nome || ''; f.u4_sei.value = it.u4_sei || '';
+                f.u5_nome.value = it.u5_nome || ''; f.u5_sei.value = it.u5_sei || '';
+                ctx = { index: idx };
+                modal.classList.add('open');
+            } else if (cmd === 'del') {
+                const it = state.items[idx];
+                const label = it ? (it.supervisor || 'registro') : 'registro';
+                if (confirm(`Confirmar exclusão de "${label}"?`)) {
+                    state.items.splice(idx, 1);
+                    save(K_SUP, state);
+                    render();
+                }
+            }
+        });
+
+        // modal controls
+        btnCancel.addEventListener('click', () => { modal.classList.remove('open'); ctx = null; });
+        modal.addEventListener('click', (e) => { if (e.target === modal) { modal.classList.remove('open'); ctx = null; } });
+        btnSave.addEventListener('click', () => {
+            if (!ctx) return;
+            const state = load(K_SUP, { items: [] });
+            const it = state.items[ctx.index] || {};
+            // simples validação (mantém obrigatórios)
+            if (!f.supervisor.value || !f.u1_nome.value || !f.u1_sei.value ||
+                !f.u2_nome.value || !f.u2_sei.value || !f.u3_nome.value || !f.u3_sei.value) {
+                alert('Campos obrigatórios faltando: Supervisor e Unidades 1–3 com seus SEIs.');
+                return;
+            }
+            state.items[ctx.index] = {
+                ...it,
+                supervisor: f.supervisor.value.trim(),
+                u1_nome: f.u1_nome.value.trim(), u1_sei: f.u1_sei.value.trim(),
+                u2_nome: f.u2_nome.value.trim(), u2_sei: f.u2_sei.value.trim(),
+                u3_nome: f.u3_nome.value.trim(), u3_sei: f.u3_sei.value.trim(),
+                u4_nome: f.u4_nome.value.trim(), u4_sei: f.u4_sei.value.trim(),
+                u5_nome: f.u5_nome.value.trim(), u5_sei: f.u5_sei.value.trim(),
+            };
+            save(K_SUP, state);
+            modal.classList.remove('open'); ctx = null;
+            render();
+        });
+
+        // exportar CSV
+        function exportCSV() {
+            const state = load(K_SUP, { items: [] });
+            if (!state.items.length) { alert('Não há dados para exportar.'); return; }
+            const headers = [
+                'Supervisor', 'U1 Nome', 'U1 SEI', 'U2 Nome', 'U2 SEI', 'U3 Nome', 'U3 SEI', 'U4 Nome', 'U4 SEI', 'U5 Nome', 'U5 SEI', 'Criado em'
+            ];
+            const rows = state.items
+                .sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''))
+                .map(it => [
+                    it.supervisor || '', it.u1_nome || '', it.u1_sei || '',
+                    it.u2_nome || '', it.u2_sei || '',
+                    it.u3_nome || '', it.u3_sei || '',
+                    it.u4_nome || '', it.u4_sei || '',
+                    it.u5_nome || '', it.u5_sei || '',
+                    it.createdAt || ''
+                ]);
+            const csv = [headers, ...rows].map(r => r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(',')).join('\n');
+            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'supervisao-sei.csv'; a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('exportCsv').addEventListener('click', exportCSV);
+        document.getElementById('printPage').addEventListener('click', () => window.print());
+
+        // inicial
+        render();
+    </script>
+</body>
+
+</html>
