@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Resultados – SEI dos Termos de Visita (Supervisão)</title>
+    <title>Resultados – Visitas e Apoio Presencial (Supervisor)</title>
     <style>
         :root {
             --bg: #0f172a;
@@ -34,7 +34,7 @@
         }
 
         .container {
-            max-width: 1150px;
+            max-width: 1100px;
             margin: 0 auto
         }
 
@@ -48,14 +48,14 @@
         }
 
         h1 {
-            font-size: 1.2rem;
+            font-size: 1.35rem;
             margin: 0
         }
 
         .card {
             background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, .12));
             border: 1px solid rgba(255, 255, 255, .08);
-            border-radius: var(--radius);
+            border-radius: 16px;
             box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
             margin-bottom: 16px
         }
@@ -73,7 +73,15 @@
             flex: 1
         }
 
-        input,
+        .toolbar input {
+            max-width: 340px;
+            background: #0b1226;
+            border: 1px solid rgba(255, 255, 255, .1);
+            color: var(--text);
+            padding: 10px;
+            border-radius: 12px
+        }
+
         select {
             background: #0b1226;
             border: 1px solid rgba(255, 255, 255, .1);
@@ -136,7 +144,8 @@
 
         .actions {
             display: flex;
-            gap: 6px;
+            gap: 8px;
+            align-items: center;
             flex-wrap: wrap
         }
 
@@ -166,8 +175,9 @@
         }
 
         .btn-small {
-            padding: 6px 9px;
-            font-weight: 600
+            padding: 6px 10px;
+            font-weight: 600;
+            border-radius: 10px
         }
 
         .empty {
@@ -177,7 +187,6 @@
             border-top: 1px dashed rgba(255, 255, 255, .18)
         }
 
-        /* modal */
         .modal {
             position: fixed;
             inset: 0;
@@ -195,7 +204,7 @@
 
         .modal-card {
             width: 100%;
-            max-width: 620px;
+            max-width: 540px;
             background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(0, 0, 0, .18));
             border: 1px solid rgba(255, 255, 255, .12);
             border-radius: 18px;
@@ -208,28 +217,24 @@
             font-size: 1.05rem
         }
 
-        .grid {
+        .modal-grid {
             display: grid;
-            gap: 10px;
-            grid-template-columns: repeat(12, 1fr)
+            grid-template-columns: 1fr;
+            gap: 10px
         }
 
-        .col-12 {
-            grid-column: span 12
+        .field {
+            display: grid;
+            gap: 6px
         }
 
-        .col-6 {
-            grid-column: span 6
-        }
-
-        label {
-            display: block;
+        .field label {
             font-size: .85rem;
             color: var(--muted)
         }
 
-        .field input {
-            width: 100%;
+        .field input,
+        .field textarea {
             background: #0b1226;
             border: 1px solid rgba(255, 255, 255, .15);
             color: var(--text);
@@ -249,265 +254,263 @@
 <body>
     <div class="container">
         <header>
-            <h1>Resultados – SEI dos Termos de Visita (Supervisão)</h1>
+            <h1>Resultados – Visitas e Apoio Presencial (Supervisor)</h1>
             <div class="actions">
                 <a class="btn btn-secondary" href="./supervisao-form.html">Cadastrar novo</a>
                 <button id="printPage" class="btn-secondary">Imprimir</button>
-                <button id="exportCsv" class="btn-secondary">Exportar CSV</button>
+                <button id="exportCsv" class="btn-secondary">Exportar CSV (aba ativa)</button>
             </div>
         </header>
 
-        <section class="card">
+        <section id="sec-visitas" class="card">
             <div class="toolbar">
-                <div class="grow">
-                    <input id="q" type="search" placeholder="Filtrar por supervisor, unidade ou SEI..."
-                        aria-label="Filtro de busca" />
-                </div>
-                <span id="counter" class="pill">0 registros</span>
+                <div class="grow"><input id="v-search" type="search"
+                        placeholder="Filtrar por supervisor, escola ou tema..." aria-label="Filtro de busca" /></div>
+                <select id="v-filterMonth" aria-label="Filtrar por mês">
+                    <option value="">Todos os meses</option>
+                </select>
+                <select id="v-filterSchool" aria-label="Filtrar por escola">
+                    <option value="">Todas as escolas</option>
+                </select>
+                <span id="v-counter" class="pill">0 registros</span>
             </div>
             <div class="table-wrap">
-                <table aria-describedby="counter">
+                <table aria-describedby="v-counter">
                     <thead>
                         <tr>
+                            <th>Data</th>
+                            <th>Mês</th>
                             <th>Supervisor</th>
-                            <th>Unidade 1</th>
-                            <th>Unidade 2</th>
-                            <th>Unidade 3</th>
-                            <th>Unidade 4 (opcional)</th>
-                            <th>Unidade 5 (opcional)</th>
+                            <th>Escola</th>
+                            <th>Tema</th>
+                            <th>Observações</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody id="tbody"></tbody>
+                    <tbody id="v-tbody"></tbody>
                 </table>
-                <div id="empty" class="empty">Nenhum registro cadastrado.</div>
+                <div id="v-empty" class="empty">Nenhum registro encontrado.</div>
             </div>
         </section>
     </div>
 
-    <!-- Modal de Edição -->
+    <!-- Modal de edição -->
     <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
         <div class="modal-card">
             <h2 id="editTitle">Editar registro</h2>
-            <div class="grid">
-                <div class="col-12 field">
-                    <label for="f_supervisor">Supervisor</label>
-                    <input id="f_supervisor" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u1_nome">Unidade 1 (nome)</label>
-                    <input id="f_u1_nome" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u1_sei">Unidade 1 (SEI)</label>
-                    <input id="f_u1_sei" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u2_nome">Unidade 2 (nome)</label>
-                    <input id="f_u2_nome" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u2_sei">Unidade 2 (SEI)</label>
-                    <input id="f_u2_sei" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u3_nome">Unidade 3 (nome)</label>
-                    <input id="f_u3_nome" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u3_sei">Unidade 3 (SEI)</label>
-                    <input id="f_u3_sei" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u4_nome">Unidade 4 (nome)</label>
-                    <input id="f_u4_nome" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u4_sei">Unidade 4 (SEI)</label>
-                    <input id="f_u4_sei" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u5_nome">Unidade 5 (nome)</label>
-                    <input id="f_u5_nome" type="text" />
-                </div>
-                <div class="col-6 field">
-                    <label for="f_u5_sei">Unidade 5 (SEI)</label>
-                    <input id="f_u5_sei" type="text" />
-                </div>
+            <div class="modal-grid">
+                <div class="field"><label for="fData">Data</label><input id="fData" type="date" /></div>
+                <div class="field"><label for="fProf">Supervisor</label><input id="fProf" type="text" /></div>
+                <div class="field"><label for="fEscola">Escola</label><input id="fEscola" type="text" /></div>
+                <div class="field"><label for="fTema">Tema</label><input id="fTema" type="text" /></div>
+                <div class="field"><label for="fObs">Observações</label><textarea id="fObs" rows="4"></textarea></div>
             </div>
             <div class="modal-actions">
-                <button id="btnCancel" class="btn btn-secondary">Cancelar</button>
-                <button id="btnSave" class="btn btn-secondary">Salvar</button>
+                <button id="btnCancel" class="btn-secondary">Cancelar</button>
+                <button id="btnSave" class="btn-secondary">Salvar</button>
             </div>
         </div>
     </div>
 
     <script>
-        const $ = (s, scope = document) => scope.querySelector(s);
-        const $$ = (s, scope = document) => Array.from(scope.querySelectorAll(s));
+        /* ===== Supabase (PROJETO NOVO) ===== */
+        const SUPABASE_URL = 'https://sfhxxkafubugqvaycnke.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmaHh4a2FmdWJ1Z3F2YXljbmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NTExMDEsImV4cCI6MjA3NzMyNzEwMX0.m7GJ-NVuouQsGdPTRGAx1bd6aPIP5-OWrdvoFTWSJU0';
+        const sbHeaders = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' };
+
+        async function sbSelectAll() {
+            const url = `${SUPABASE_URL}/rest/v1/supervisor_submissions?select=id,supervisor_nome,escola,data_visita,tema,observacoes&order=created_at.desc`;
+            const r = await fetch(url, { headers: sbHeaders });
+            if (!r.ok) throw new Error(`SELECT falhou: HTTP ${r.status}`);
+            return r.json();
+        }
+        async function sbDelete(id) {
+            const url = `${SUPABASE_URL}/rest/v1/supervisor_submissions?id=eq.${encodeURIComponent(id)}`;
+            const r = await fetch(url, { method: 'DELETE', headers: sbHeaders });
+            if (!r.ok) throw new Error(`DELETE falhou: HTTP ${r.status}`);
+        }
+        async function sbUpdate(id, payload) {
+            const url = `${SUPABASE_URL}/rest/v1/supervisor_submissions?id=eq.${encodeURIComponent(id)}`;
+            const r = await fetch(url, { method: 'PATCH', headers: { ...sbHeaders, Prefer: 'return=representation' }, body: JSON.stringify(payload) });
+            const txt = await r.text(); let json = null; try { json = txt ? JSON.parse(txt) : null } catch { }
+            if (!r.ok) throw new Error(json?.message || txt || `PATCH falhou: HTTP ${r.status}`);
+            return json?.[0] || null;
+        }
+
+        /* ===== Util ===== */
+        const $ = (s, sc = document) => sc.querySelector(s);
+        const $$ = (s, sc = document) => Array.from(sc.querySelectorAll(s));
         const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
         const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
-        const K_SUP = 'sei-termos-v1';
-
-        if (!load(K_SUP, null)) save(K_SUP, { items: [] });
-
-        const els = {
-            q: $('#q'), counter: $('#counter'), tbody: $('#tbody'), empty: $('#empty')
+        const PT_BR_MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const fmt = {
+            date(iso) { if (!iso) return ""; const d = new Date(iso + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(); },
+            month(iso) { if (!iso) return ""; return PT_BR_MESES[new Date(iso + 'T00:00:00').getMonth()]; }
         };
+        const K_VISITAS = 'supervisor-registros-v1';
 
-        // modal
-        const modal = $('#editModal');
-        const f = {
-            supervisor: $('#f_supervisor'),
-            u1_nome: $('#f_u1_nome'), u1_sei: $('#f_u1_sei'),
-            u2_nome: $('#f_u2_nome'), u2_sei: $('#f_u2_sei'),
-            u3_nome: $('#f_u3_nome'), u3_sei: $('#f_u3_sei'),
-            u4_nome: $('#f_u4_nome'), u4_sei: $('#f_u4_sei'),
-            u5_nome: $('#f_u5_nome'), u5_sei: $('#f_u5_sei'),
-        };
-        const btnCancel = $('#btnCancel'), btnSave = $('#btnSave');
-        let ctx = null; // { index }
-
-        function escapeHtml(str) {
-            return String(str || '')
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;').replace(/\"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+        /* ===== Sync banco -> storage ===== */
+        async function syncFromSupabase() {
+            const rows = await sbSelectAll();
+            const items = rows.map(r => ({
+                id: crypto?.randomUUID?.() || `id-${Math.random().toString(16).slice(2)}`,
+                db_id: r.id,
+                data: r.data_visita || '',
+                professores: r.supervisor_nome || '',
+                escola: r.escola || '',
+                tema: r.tema || '',
+                obs: r.observacoes || ''
+            }));
+            save(K_VISITAS, { items });
         }
 
-        function fmtUnit(nome, sei) {
-            if (!nome && !sei) return '—';
-            return `<strong>${escapeHtml(nome || '')}</strong><br/><small>${escapeHtml(sei || '')}</small>`;
+        /* ===== Modal edição ===== */
+        const modal = $('#editModal'); const fData = $('#fData'), fProf = $('#fProf'), fEscola = $('#fEscola'), fTema = $('#fTema'), fObs = $('#fObs');
+        const btnCancel = $('#btnCancel'), btnSave = $('#btnSave'); let modalCtx = null;
+        function openEdit(storageKey, index) {
+            const state = load(storageKey, { items: [] }); const it = state.items[index] || {};
+            fData.value = it.data || ''; fProf.value = it.professores || ''; fEscola.value = it.escola || ''; fTema.value = it.tema || ''; fObs.value = it.obs || '';
+            modalCtx = { storageKey, index, original: it }; modal.classList.add('open');
         }
+        function closeEdit() { modal.classList.remove('open'); modalCtx = null; }
+        btnCancel.addEventListener('click', closeEdit);
+        modal.addEventListener('click', e => { if (e.target === modal) closeEdit(); });
 
-        function render() {
-            const state = load(K_SUP, { items: [] });
+        btnSave.addEventListener('click', async () => {
+            if (!modalCtx) return;
+            const { storageKey, index } = modalCtx;
+            const state = load(storageKey, { items: [] });
+            const dval = (fData.value || '').trim();
+            if (dval && !/^\d{4}-\d{2}-\d{2}$/.test(dval)) { alert('Data inválida. Use YYYY-MM-DD.'); return; }
+            const updated = {
+                ...(state.items[index] || {}),
+                data: dval || '', professores: fProf.value || '', escola: fEscola.value || '', tema: fTema.value || '', obs: fObs.value || ''
+            };
 
-            const q = (els.q.value || '').toLowerCase().trim();
-            const rows = state.items
-                .map((it, idx) => ({ it, idx }))
-                .filter(({ it }) => {
-                    if (!q) return true;
-                    const blob = [
-                        it.supervisor, it.u1_nome, it.u1_sei, it.u2_nome, it.u2_sei,
-                        it.u3_nome, it.u3_sei, it.u4_nome, it.u4_sei, it.u5_nome, it.u5_sei
-                    ].join(' ').toLowerCase();
-                    return blob.includes(q);
-                })
-                .sort((a, b) => (a.it.createdAt || '').localeCompare(b.it.createdAt || ''));
+            try {
+                if (updated.db_id) {
+                    await sbUpdate(updated.db_id, {
+                        data_visita: updated.data || null,
+                        supervisor_nome: updated.professores || null,
+                        escola: updated.escola || null,
+                        tema: updated.tema || null,
+                        observacoes: updated.obs || null
+                    });
+                }
+            } catch (err) { alert('Falha ao salvar no banco: ' + err.message); return; }
 
-            els.tbody.innerHTML = '';
-            rows.forEach(({ it, idx }) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-          <td>${escapeHtml(it.supervisor)}</td>
-          <td>${fmtUnit(it.u1_nome, it.u1_sei)}</td>
-          <td>${fmtUnit(it.u2_nome, it.u2_sei)}</td>
-          <td>${fmtUnit(it.u3_nome, it.u3_sei)}</td>
-          <td>${fmtUnit(it.u4_nome, it.u4_sei)}</td>
-          <td>${fmtUnit(it.u5_nome, it.u5_sei)}</td>
-          <td>
-            <div class="actions">
-              <button class="btn-small btn-secondary" data-cmd="edit" data-index="${idx}">Editar</button>
-              <button class="btn-small btn-danger" data-cmd="del" data-index="${idx}">Excluir</button>
-            </div>
-          </td>`;
-                els.tbody.appendChild(tr);
+            state.items[index] = updated; save(storageKey, state); mod.render(); closeEdit();
+        });
+
+        /* ===== Tabela ===== */
+        function createReadModule(storageKey) {
+            const els = {
+                search: $('#v-search'), filterMonth: $('#v-filterMonth'), filterSchool: $('#v-filterSchool'),
+                counter: $('#v-counter'), tbody: $('#v-tbody'), empty: $('#v-empty')
+            };
+
+            function getState() { return load(storageKey, { items: [] }); }
+            function refreshSchoolFilter(state) {
+                const selected = els.filterSchool.value;
+                els.filterSchool.innerHTML = '<option value="">Todas as escolas</option>';
+                const escolas = [...new Set(state.items.map(x => (x.escola || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+                escolas.forEach(es => { const o = document.createElement('option'); o.value = es; o.textContent = es; els.filterSchool.appendChild(o); });
+                if (selected) els.filterSchool.value = selected;
+            }
+            function initFilters(state) {
+                if (!els.filterMonth.dataset.ready) {
+                    PT_BR_MESES.forEach((m, i) => { const o = document.createElement('option'); o.value = String(i + 1).padStart(2, '0'); o.textContent = m; els.filterMonth.appendChild(o); });
+                    els.filterMonth.dataset.ready = '1';
+                }
+                refreshSchoolFilter(state);
+            }
+            function escapeHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;'); }
+
+            function render() {
+                const state = getState(); initFilters(state);
+                const q = (els.search.value || '').trim().toLowerCase();
+                const mm = els.filterMonth.value; const es = (els.filterSchool.value || '').trim();
+                const rows = state.items
+                    .map((it, idx) => ({ it, idx }))
+                    .filter(({ it }) => {
+                        const matches = !q || [it.professores, it.escola, it.tema, it.obs].join(' ').toLowerCase().includes(q);
+                        const monthOk = !mm || (it.data && it.data.split('-')[1] === mm);
+                        const schoolOk = !es || it.escola === es;
+                        return matches && monthOk && schoolOk;
+                    })
+                    .sort((a, b) => (a.it.data || '').localeCompare(b.it.data || ''));
+
+                els.tbody.innerHTML = '';
+                rows.forEach(({ it, idx }) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+            <td><span class="pill">${fmt.date(it.data)}</span></td>
+            <td>${fmt.month(it.data)}</td>
+            <td>${escapeHtml(it.professores || '')}</td>
+            <td>${escapeHtml(it.escola || '')}</td>
+            <td>${escapeHtml(it.tema || '')}</td>
+            <td>${escapeHtml(it.obs || '')}</td>
+            <td>
+              <div class="actions">
+                <button class="btn-small btn-secondary" data-cmd="edit" data-index="${idx}">Editar</button>
+                <button class="btn-small btn-danger" data-cmd="del" data-index="${idx}">Excluir</button>
+              </div>
+            </td>`;
+                    els.tbody.appendChild(tr);
+                });
+
+                els.empty.style.display = rows.length ? 'none' : 'block';
+                els.counter.textContent = `${rows.length} registros`;
+                refreshSchoolFilter(state);
+            }
+
+            els.search.addEventListener('input', render);
+            els.filterMonth.addEventListener('change', render);
+            els.filterSchool.addEventListener('change', render);
+
+            els.tbody.addEventListener('click', async (ev) => {
+                const btn = ev.target.closest('[data-cmd]'); if (!btn) return;
+                const idx = Number(btn.getAttribute('data-index')); const cmd = btn.getAttribute('data-cmd');
+                if (cmd === 'edit') { openEdit(storageKey, idx); return; }
+
+                if (cmd === 'del') {
+                    const state = load(storageKey, { items: [] }); const reg = state.items[idx];
+                    const txt = reg ? `Confirma excluir o registro de "${reg.professores || '—'}" (${reg.escola || '—'})?` : 'Confirma excluir este registro?';
+                    if (!confirm(txt)) return;
+
+                    try { if (reg.db_id) await sbDelete(reg.db_id); } catch (err) { alert('Falha ao excluir no banco: ' + err.message); return; }
+                    state.items.splice(idx, 1); save(storageKey, state); render();
+                }
             });
 
-            els.empty.style.display = rows.length ? 'none' : 'block';
-            els.counter.textContent = `${rows.length} registros`;
+            return { render };
         }
 
-        // eventos de filtro
-        els.q.addEventListener('input', render);
+        // Boot
+        let mod;
+        (async function init() {
+            try { await syncFromSupabase(); } catch (e) { console.error('Sync erro:', e); }
+            mod = createReadModule(K_VISITAS);
+            mod.render();
+        })();
 
-        // delegação para ações
-        els.tbody.addEventListener('click', (ev) => {
-            const btn = ev.target.closest('[data-cmd]');
-            if (!btn) return;
-            const idx = Number(btn.getAttribute('data-index'));
-            const cmd = btn.getAttribute('data-cmd');
-            const state = load(K_SUP, { items: [] });
-
-            if (cmd === 'edit') {
-                const it = state.items[idx];
-                if (!it) return;
-                f.supervisor.value = it.supervisor || '';
-                f.u1_nome.value = it.u1_nome || ''; f.u1_sei.value = it.u1_sei || '';
-                f.u2_nome.value = it.u2_nome || ''; f.u2_sei.value = it.u2_sei || '';
-                f.u3_nome.value = it.u3_nome || ''; f.u3_sei.value = it.u3_sei || '';
-                f.u4_nome.value = it.u4_nome || ''; f.u4_sei.value = it.u4_sei || '';
-                f.u5_nome.value = it.u5_nome || ''; f.u5_sei.value = it.u5_sei || '';
-                ctx = { index: idx };
-                modal.classList.add('open');
-            } else if (cmd === 'del') {
-                const it = state.items[idx];
-                const label = it ? (it.supervisor || 'registro') : 'registro';
-                if (confirm(`Confirmar exclusão de "${label}"?`)) {
-                    state.items.splice(idx, 1);
-                    save(K_SUP, state);
-                    render();
-                }
-            }
-        });
-
-        // modal controls
-        btnCancel.addEventListener('click', () => { modal.classList.remove('open'); ctx = null; });
-        modal.addEventListener('click', (e) => { if (e.target === modal) { modal.classList.remove('open'); ctx = null; } });
-        btnSave.addEventListener('click', () => {
-            if (!ctx) return;
-            const state = load(K_SUP, { items: [] });
-            const it = state.items[ctx.index] || {};
-            // simples validação (mantém obrigatórios)
-            if (!f.supervisor.value || !f.u1_nome.value || !f.u1_sei.value ||
-                !f.u2_nome.value || !f.u2_sei.value || !f.u3_nome.value || !f.u3_sei.value) {
-                alert('Campos obrigatórios faltando: Supervisor e Unidades 1–3 com seus SEIs.');
-                return;
-            }
-            state.items[ctx.index] = {
-                ...it,
-                supervisor: f.supervisor.value.trim(),
-                u1_nome: f.u1_nome.value.trim(), u1_sei: f.u1_sei.value.trim(),
-                u2_nome: f.u2_nome.value.trim(), u2_sei: f.u2_sei.value.trim(),
-                u3_nome: f.u3_nome.value.trim(), u3_sei: f.u3_sei.value.trim(),
-                u4_nome: f.u4_nome.value.trim(), u4_sei: f.u4_sei.value.trim(),
-                u5_nome: f.u5_nome.value.trim(), u5_sei: f.u5_sei.value.trim(),
-            };
-            save(K_SUP, state);
-            modal.classList.remove('open'); ctx = null;
-            render();
-        });
-
-        // exportar CSV
-        function exportCSV() {
-            const state = load(K_SUP, { items: [] });
+        // Export/Print
+        document.getElementById('exportCsv').addEventListener('click', () => {
+            const state = load(K_VISITAS, { items: [] });
             if (!state.items.length) { alert('Não há dados para exportar.'); return; }
-            const headers = [
-                'Supervisor', 'U1 Nome', 'U1 SEI', 'U2 Nome', 'U2 SEI', 'U3 Nome', 'U3 SEI', 'U4 Nome', 'U4 SEI', 'U5 Nome', 'U5 SEI', 'Criado em'
-            ];
+            const headers = ['Data', 'Mês', 'Supervisor', 'Escola', 'Tema', 'Observações'];
             const rows = state.items
-                .sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''))
+                .sort((a, b) => (a.data || '').localeCompare(b.data || ''))
                 .map(it => [
-                    it.supervisor || '', it.u1_nome || '', it.u1_sei || '',
-                    it.u2_nome || '', it.u2_sei || '',
-                    it.u3_nome || '', it.u3_sei || '',
-                    it.u4_nome || '', it.u4_sei || '',
-                    it.u5_nome || '', it.u5_sei || '',
-                    it.createdAt || ''
+                    (it.data ? (() => { const d = new Date(it.data + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() })() : ''),
+                    (it.data ? PT_BR_MESES[new Date(it.data + 'T00:00:00').getMonth()] : ''),
+                    it.professores || '', it.escola || '', it.tema || '', it.obs || ''
                 ]);
             const csv = [headers, ...rows].map(r => r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(',')).join('\n');
-            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'supervisao-sei.csv'; a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        document.getElementById('exportCsv').addEventListener('click', exportCSV);
+            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'supervisor-registros.csv'; a.click(); URL.revokeObjectURL(url);
+        });
         document.getElementById('printPage').addEventListener('click', () => window.print());
-
-        // inicial
-        render();
     </script>
 </body>
 
