@@ -185,26 +185,117 @@
           </div>
           <div class="col-3">
             <label for="v-escola">Escola</label>
-            <input id="v-escola" name="escola" type="text" placeholder="Ex.: E.E. Alberto Santos" required />
-          </div>
-          <div class="col-12">
-            <label for="v-tema">Tema</label>
-            <input id="v-tema" name="tema" type="text" placeholder="Ex.: Visita técnica; Apoio em sala" required />
-          </div>
-          <div class="col-12">
-            <label for="v-obs">Observações (opcional)</label>
-            <textarea id="v-obs" name="observacoes" placeholder="Registre detalhes, encaminhamentos etc."></textarea>
-          </div>
+            <select id="v-escola" name="escola" required
+              style="width:100%;background:#0b1226;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px;border-radius:12px;outline:none">
+              <option value="" disabled selected>Selecione a escola…</option>
+              <option>ALFREDO ROBERTO</option>
+              <option>ALICE ROMANOS PROFESSORA</option>
+              <option>ANDERSON DA SILVA SOARES</option>
+              <option>ANGELA SUELI PONTES DIAS PROFESSORA</option>
+              <option>ANIS FADUL DOUTOR</option>
+              <option>ANTONIO BRASILIO MENEZES DA FONSECA PROFESSOR</option>
+              <option>ANTONIO GARCIA VEREADOR</option>
+              <option>ANTONIO JOSE CAMPOS DE MENEZES PROFESSOR</option>
+              <option>ANTONIO RODRIGUES DE ALMEIDA</option>
+              <option>ANTONIO VALDEMAR GALO VEREADOR</option>
+              <option>BATISTA RENZI</option>
+              <option>BENEDITA DE CAMPOS MARCOLONGO PROFESSORA</option>
+              <option>BRASILIO MACHADO NETO COMENDADOR</option>
+              <option>CARLINDO REIS</option>
+              <option>CARLOS MOLTENI PROFESSOR</option>
+              <option>CHOJIRO SEGAWA</option>
+              <option>CONJUNTO HABITACIONAL PARQUE DOURADO II</option>
+              <option>DAVID JORGE CURI PROFESSOR</option>
+              <option>EDIR DO COUTO ROSA PROFESSOR</option>
+              <option>ELIANE APARECIDA DANTAS DA SILVA PROFESSORA</option>
+              <option>EUCLIDES IGESCA</option>
+              <option>GERALDO JUSTINIANO DE REZENDE SILVA PROFESSOR</option>
+              <option>GILBERTO DE CARVALHO PROFESSOR</option>
+              <option>GIOVANNI BATTISTA RAFFO PROFESSOR DOUTOR</option>
+              <option>HELENA ZERRENNER</option>
+              <option>IGNES CORREA ALLEN PROFESSORA</option>
+              <option>IIJIMA</option>
+              <option>JACQUES YVES COUSTEAU COMANDANTE</option>
+              <option>JANDYRA COUTINHO PROFESSORA</option>
+              <option>JARDIM SAO PAULO II</option>
+              <option>JOSE BENEDITO LEITE BARTHOLOMEI PROFESSOR</option>
+              <option>JOSE CAMILO DE ANDRADE</option>
+              <option>JOSE EDUARDO VIEIRA RADUAN DOUTOR</option>
+              <option>JOSE PAPAIZ PROFESSOR</option>
+              <option>JOVIANO SATLER DE LIMA PROFESSOR</option>
+              <option>JUSSARA FEITOSA DOMSCHKE PROFESSORA</option>
+              <option>JUSTINO MARCONDES RANGEL PROFESSOR</option>
+              <option>LANDIA SANTOS BATISTA PROFESSORA</option>
+              <option>LEDA FERNANDES LOPES PROFESSORA</option>
+              <option>LUCY FRANCO KOWALSKI PROFESSORA</option>
+              <option>LUIZ BIANCONI</option>
+              <option>LUIZA HIDAKA PROFESSORA</option>
+              <option>MANUEL DOS SANTOS PAIVA</option>
+              <option>MARIA ELISA DE AZEVEDO CINTRA PROFESSORA</option>
+              <option>MARIO MANOEL DANTAS DE AQUINO PROFESSOR</option>
+              <option>MARTHA CALIXTO CAZAGRANDE</option>
+              <option>MASAITI SEKINE PROFESSOR</option>
+              <option>MORATO DE OLIVEIRA DOUTOR</option>
+              <option>OLAVO LEONEL FERREIRA PROFESSOR</option>
+              <option>OLZANETTI GOMES PROFESSOR</option>
+              <option>OSWALDO DE OLIVEIRA LIMA</option>
+              <option>PAULO AMERICO PAGANUCCI PROFESSOR</option>
+              <option>PAULO KOBAYASHI PROFESSOR</option>
+              <option>RAUL BRASIL PROFESSOR</option>
+              <option>ROBERTO BIANCHI</option>
+              <option>SEBASTIAO PEREIRA VIDAL</option>
+              <option>TACITO ZANCHETTA PREFEITO</option>
+              <option>TOCHICHICO YOCHICAVA PROFESSOR</option>
+              <option>TOKUZO TERAZAKI</option>
+              <option>YOLANDA BASSI PROFESSORA</option>
+              <option>ZEIKICHI FUKUOKA</option>
+              <option>ZELIA GATTAI AMADO</option>
+            </select>
         </div>
-        <div class="actions">
-          <button type="submit" class="btn-primary">Adicionar</button>
-          <button type="reset" class="btn-secondary">Limpar</button>
+        <div class="col-12">
+          <label for="v-tema">Tema</label>
+          <select id="v-tema" name="tema" required
+            style="width:100%;background:#0b1226;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px;border-radius:12px;outline:none">
+            <option value="" disabled selected>Selecione um tema…</option>
+            <option>ALUNO PRESENTE - BUSCA ATIVA</option>
+            <option>PLATAFORMAS EDUCACIONAIS</option>
+            <option>APOIO PRESENCIAL</option>
+            <option>JORNADA 90 DIAS</option>
+            <option>SAEB</option>
+            <option>PROVA PAULISTA</option>
+            <option>CONVIVA</option>
+            <option>FORMAÇÃO</option>
+            <option>PLANEJAMENTO DE AULA</option>
+            <option>EDUCAÇÃO ESPECIAL</option>
+            <option>EDUCAÇÃO PROFISSIONAL</option>
+            <option>PROGRAMA DE ENSINO INTEGRAL</option>
+            <option>ATPC</option>
+            <option>MERENDA/COZINHA/ESTOQUE / BAIXA DIÁRIA</option>
+            <option>HORÁRIO ADMINISTRATIVO / LIVRO PONTO DOCENTE E ADMINISTRATIVO</option>
+            <option>APM / PRESTAÇÕES DE CONTAS / CONSELHO DE ESCOLA</option>
+            <option>INVENTÁRIO/INSERVÍVEL</option>
+            <option>ACDA</option>
+            <option>Grêmio Estudantil</option>
+            <option>Especificidades da PEI</option>
+            <option>Prontuários de concluintes</option>
+            <option>SARESP</option>
+          </select>
         </div>
-        <p class="ok" id="ok-visitas">✓ Registro salvo.
-          <a id="ok-link-visitas" class="btn btn-secondary" href="./supervisao-resultados.html">Ver resultados</a>
-        </p>
-      </form>
-    </section>
+
+        <div class="col-12">
+          <label for="v-obs">Observações (opcional)</label>
+          <textarea id="v-obs" name="observacoes" placeholder="Registre detalhes, encaminhamentos etc."></textarea>
+        </div>
+  </div>
+  <div class="actions">
+    <button type="submit" class="btn-primary">Adicionar</button>
+    <button type="reset" class="btn-secondary">Limpar</button>
+  </div>
+  <p class="ok" id="ok-visitas">✓ Registro salvo.
+    <a id="ok-link-visitas" class="btn btn-secondary" href="./supervisao-resultados.html">Ver resultados</a>
+  </p>
+  </form>
+  </section>
   </div>
 
   <script>
