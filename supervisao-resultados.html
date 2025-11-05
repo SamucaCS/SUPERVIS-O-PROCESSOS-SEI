@@ -74,12 +74,13 @@
         }
 
         .toolbar input {
-            max-width: 340px;
+            max-width: 360px;
             background: #0b1226;
             border: 1px solid rgba(255, 255, 255, .1);
             color: var(--text);
             padding: 10px;
-            border-radius: 12px
+            border-radius: 12px;
+            width: 100%
         }
 
         select {
@@ -264,16 +265,27 @@
 
         <section id="sec-visitas" class="card">
             <div class="toolbar">
-                <div class="grow"><input id="v-search" type="search"
-                        placeholder="Filtrar por supervisor, escola ou tema..." aria-label="Filtro de busca" /></div>
-                <select id="v-filterMonth" aria-label="Filtrar por mês">
-                    <option value="">Todos os meses</option>
+                <div class="grow">
+                    <input id="v-search" type="search"
+                        placeholder="Filtrar por texto livre (supervisor, escola, tema, observações)…"
+                        aria-label="Filtro de busca" />
+                </div>
+
+                <select id="v-filterSupervisor" aria-label="Filtrar por supervisor">
+                    <option value="">Todos os supervisores</option>
                 </select>
+
+                <select id="v-filterTema" aria-label="Filtrar por tema">
+                    <option value="">Todos os temas</option>
+                </select>
+
                 <select id="v-filterSchool" aria-label="Filtrar por escola">
                     <option value="">Todas as escolas</option>
                 </select>
+
                 <span id="v-counter" class="pill">0 registros</span>
             </div>
+
             <div class="table-wrap">
                 <table aria-describedby="v-counter">
                     <thead>
@@ -367,6 +379,7 @@
         /* ===== Modal edição ===== */
         const modal = $('#editModal'); const fData = $('#fData'), fProf = $('#fProf'), fEscola = $('#fEscola'), fTema = $('#fTema'), fObs = $('#fObs');
         const btnCancel = $('#btnCancel'), btnSave = $('#btnSave'); let modalCtx = null;
+
         function openEdit(storageKey, index) {
             const state = load(storageKey, { items: [] }); const it = state.items[index] || {};
             fData.value = it.data || ''; fProf.value = it.professores || ''; fEscola.value = it.escola || ''; fTema.value = it.tema || ''; fObs.value = it.obs || '';
@@ -402,41 +415,90 @@
             state.items[index] = updated; save(storageKey, state); mod.render(); closeEdit();
         });
 
-        /* ===== Tabela ===== */
+        /* ===== Tabela + Filtros ===== */
         function createReadModule(storageKey) {
             const els = {
-                search: $('#v-search'), filterMonth: $('#v-filterMonth'), filterSchool: $('#v-filterSchool'),
-                counter: $('#v-counter'), tbody: $('#v-tbody'), empty: $('#v-empty')
+                search: $('#v-search'),
+                filterSupervisor: $('#v-filterSupervisor'),
+                filterTema: $('#v-filterTema'),
+                filterSchool: $('#v-filterSchool'),
+                counter: $('#v-counter'),
+                tbody: $('#v-tbody'),
+                empty: $('#v-empty')
             };
 
             function getState() { return load(storageKey, { items: [] }); }
+
+            function uniqueSorted(values) {
+                return [...new Set(values.map(v => (v || '').trim()).filter(Boolean))]
+                    .sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+            }
+
+            function refreshSupervisorFilter(state) {
+                const selected = els.filterSupervisor.value;
+                els.filterSupervisor.innerHTML = '<option value="">Todos os supervisores</option>';
+                uniqueSorted(state.items.map(x => x.professores)).forEach(nome => {
+                    const o = document.createElement('option'); o.value = nome; o.textContent = nome;
+                    els.filterSupervisor.appendChild(o);
+                });
+                if (selected) els.filterSupervisor.value = selected;
+            }
+
+            function refreshTemaFilter(state) {
+                const selected = els.filterTema.value;
+                els.filterTema.innerHTML = '<option value="">Todos os temas</option>';
+                uniqueSorted(state.items.map(x => x.tema)).forEach(t => {
+                    const o = document.createElement('option'); o.value = t; o.textContent = t;
+                    els.filterTema.appendChild(o);
+                });
+                if (selected) els.filterTema.value = selected;
+            }
+
             function refreshSchoolFilter(state) {
                 const selected = els.filterSchool.value;
                 els.filterSchool.innerHTML = '<option value="">Todas as escolas</option>';
-                const escolas = [...new Set(state.items.map(x => (x.escola || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
-                escolas.forEach(es => { const o = document.createElement('option'); o.value = es; o.textContent = es; els.filterSchool.appendChild(o); });
+                uniqueSorted(state.items.map(x => x.escola)).forEach(es => {
+                    const o = document.createElement('option'); o.value = es; o.textContent = es;
+                    els.filterSchool.appendChild(o);
+                });
                 if (selected) els.filterSchool.value = selected;
             }
+
             function initFilters(state) {
-                if (!els.filterMonth.dataset.ready) {
-                    PT_BR_MESES.forEach((m, i) => { const o = document.createElement('option'); o.value = String(i + 1).padStart(2, '0'); o.textContent = m; els.filterMonth.appendChild(o); });
-                    els.filterMonth.dataset.ready = '1';
-                }
+                refreshSupervisorFilter(state);
+                refreshTemaFilter(state);
                 refreshSchoolFilter(state);
             }
-            function escapeHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;'); }
+
+            function escapeHtml(s) {
+                return String(s)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/\"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
 
             function render() {
-                const state = getState(); initFilters(state);
+                const state = getState();
+                initFilters(state);
+
                 const q = (els.search.value || '').trim().toLowerCase();
-                const mm = els.filterMonth.value; const es = (els.filterSchool.value || '').trim();
+                const sup = (els.filterSupervisor.value || '').trim();
+                const tema = (els.filterTema.value || '').trim();
+                const es = (els.filterSchool.value || '').trim();
+
                 const rows = state.items
                     .map((it, idx) => ({ it, idx }))
                     .filter(({ it }) => {
-                        const matches = !q || [it.professores, it.escola, it.tema, it.obs].join(' ').toLowerCase().includes(q);
-                        const monthOk = !mm || (it.data && it.data.split('-')[1] === mm);
-                        const schoolOk = !es || it.escola === es;
-                        return matches && monthOk && schoolOk;
+                        const matchesText = !q || [it.professores, it.escola, it.tema, it.obs]
+                            .join(' ').toLowerCase().includes(q);
+
+                        const supOk = !sup || it.professores === sup;
+                        const temaOk = !tema || it.tema === tema;
+                        const esOk = !es || it.escola === es;
+
+                        return matchesText && supOk && temaOk && esOk;
                     })
                     .sort((a, b) => (a.it.data || '').localeCompare(b.it.data || ''));
 
@@ -444,46 +506,36 @@
                 rows.forEach(({ it, idx }) => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-            <td><span class="pill">${fmt.date(it.data)}</span></td>
-            <td>${fmt.month(it.data)}</td>
-            <td>${escapeHtml(it.professores || '')}</td>
-            <td>${escapeHtml(it.escola || '')}</td>
-            <td>${escapeHtml(it.tema || '')}</td>
-            <td>${escapeHtml(it.obs || '')}</td>
-            <td>
-              <div class="actions">
-                <button class="btn-small btn-secondary" data-cmd="edit" data-index="${idx}">Editar</button>
-                <button class="btn-small btn-danger" data-cmd="del" data-index="${idx}">Excluir</button>
-              </div>
-            </td>`;
+                        <td><span class="pill">${fmt.date(it.data)}</span></td>
+                        <td>${fmt.month(it.data)}</td>
+                        <td>${escapeHtml(it.professores || '')}</td>
+                        <td>${escapeHtml(it.escola || '')}</td>
+                        <td>${escapeHtml(it.tema || '')}</td>
+                        <td>${escapeHtml(it.obs || '')}</td>
+                        <td>
+                          <div class="actions">
+                            <button class="btn-small btn-secondary" data-cmd="edit" data-index="${idx}">Editar</button>
+                            <button class="btn-small btn-danger" data-cmd="del" data-index="${idx}">Excluir</button>
+                          </div>
+                        </td>`;
                     els.tbody.appendChild(tr);
                 });
 
                 els.empty.style.display = rows.length ? 'none' : 'block';
                 els.counter.textContent = `${rows.length} registros`;
+                // Recarrega as listas para refletir novos valores salvos/alterados
+                refreshSupervisorFilter(state);
+                refreshTemaFilter(state);
                 refreshSchoolFilter(state);
             }
 
+            // Listeners
             els.search.addEventListener('input', render);
-            els.filterMonth.addEventListener('change', render);
+            els.filterSupervisor.addEventListener('change', render);
+            els.filterTema.addEventListener('change', render);
             els.filterSchool.addEventListener('change', render);
 
-            els.tbody.addEventListener('click', async (ev) => {
-                const btn = ev.target.closest('[data-cmd]'); if (!btn) return;
-                const idx = Number(btn.getAttribute('data-index')); const cmd = btn.getAttribute('data-cmd');
-                if (cmd === 'edit') { openEdit(storageKey, idx); return; }
-
-                if (cmd === 'del') {
-                    const state = load(storageKey, { items: [] }); const reg = state.items[idx];
-                    const txt = reg ? `Confirma excluir o registro de "${reg.professores || '—'}" (${reg.escola || '—'})?` : 'Confirma excluir este registro?';
-                    if (!confirm(txt)) return;
-
-                    try { if (reg.db_id) await sbDelete(reg.db_id); } catch (err) { alert('Falha ao excluir no banco: ' + err.message); return; }
-                    state.items.splice(idx, 1); save(storageKey, state); render();
-                }
-            });
-
-            return { render };
+            return { render, getState };
         }
 
         // Boot
@@ -494,22 +546,41 @@
             mod.render();
         })();
 
-        // Export/Print
+        // Export filtrado (aba ativa)
         document.getElementById('exportCsv').addEventListener('click', () => {
+            if (!mod) return;
             const state = load(K_VISITAS, { items: [] });
-            if (!state.items.length) { alert('Não há dados para exportar.'); return; }
+
+            // Aplica os mesmos filtros da renderização
+            const q = (document.getElementById('v-search').value || '').trim().toLowerCase();
+            const sup = (document.getElementById('v-filterSupervisor').value || '').trim();
+            const tema = (document.getElementById('v-filterTema').value || '').trim();
+            const es = (document.getElementById('v-filterSchool').value || '').trim();
+
+            const filtered = state.items
+                .filter(it => {
+                    const matchesText = !q || [it.professores, it.escola, it.tema, it.obs]
+                        .join(' ').toLowerCase().includes(q);
+                    const supOk = !sup || it.professores === sup;
+                    const temaOk = !tema || it.tema === tema;
+                    const esOk = !es || it.escola === es;
+                    return matchesText && supOk && temaOk && esOk;
+                })
+                .sort((a, b) => (a.data || '').localeCompare(b.data || ''));
+
+            if (!filtered.length) { alert('Não há dados para exportar.'); return; }
+
             const headers = ['Data', 'Mês', 'Supervisor', 'Escola', 'Tema', 'Observações'];
-            const rows = state.items
-                .sort((a, b) => (a.data || '').localeCompare(b.data || ''))
-                .map(it => [
-                    (it.data ? (() => { const d = new Date(it.data + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() })() : ''),
-                    (it.data ? PT_BR_MESES[new Date(it.data + 'T00:00:00').getMonth()] : ''),
-                    it.professores || '', it.escola || '', it.tema || '', it.obs || ''
-                ]);
+            const rows = filtered.map(it => [
+                (it.data ? (() => { const d = new Date(it.data + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() })() : ''),
+                (it.data ? PT_BR_MESES[new Date(it.data + 'T00:00:00').getMonth()] : ''),
+                it.professores || '', it.escola || '', it.tema || '', it.obs || ''
+            ]);
             const csv = [headers, ...rows].map(r => r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(',')).join('\n');
             const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = 'supervisor-registros.csv'; a.click(); URL.revokeObjectURL(url);
         });
+
         document.getElementById('printPage').addEventListener('click', () => window.print());
     </script>
 </body>
