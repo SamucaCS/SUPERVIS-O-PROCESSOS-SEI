@@ -12,17 +12,19 @@
             --muted: #94a3b8;
             --text: #e5e7eb;
             --accent: #22d3ee;
+            --accent-2: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
             --radius: 16px
         }
 
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
         }
 
         html,
         body {
-            margin: 0
+            margin: 0;
         }
 
         body {
@@ -30,12 +32,12 @@
             background: linear-gradient(135deg, #0b1025 0%, #0f172a 40%, #0b2530 100%);
             color: var(--text);
             min-height: 100vh;
-            padding: 24px
+            padding: 24px;
         }
 
         .container {
-            max-width: 1100px;
-            margin: 0 auto
+            max-width: 1080px;
+            margin: 0 auto;
         }
 
         header {
@@ -44,210 +46,210 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            margin-bottom: 12px
+            margin-bottom: 16px;
         }
 
         h1 {
             font-size: 1.35rem;
-            margin: 0
+            margin: 0;
         }
 
         .card {
             background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, .12));
             border: 1px solid rgba(255, 255, 255, .08);
-            border-radius: 16px;
+            border-radius: var(--radius);
             box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
-            margin-bottom: 16px
+            margin-bottom: 16px;
+            padding: 16px;
         }
 
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-            padding: 12px;
-            border-top: 1px solid rgba(255, 255, 255, .1)
+        .card--hidden {
+            display: none;
         }
 
-        .toolbar .grow {
-            flex: 1
-        }
-
-        .toolbar input {
-            max-width: 360px;
-            background: #0b1226;
-            border: 1px solid rgba(255, 255, 255, .1);
-            color: var(--text);
-            padding: 10px;
-            border-radius: 12px;
-            width: 100%
-        }
-
-        select {
-            background: #0b1226;
-            border: 1px solid rgba(255, 255, 255, .1);
-            color: var(--text);
-            padding: 10px;
-            border-radius: 12px
-        }
-
-        .pill {
-            padding: 4px 8px;
-            border-radius: 999px;
-            background: #0c1a34;
-            border: 1px solid rgba(255, 255, 255, .12);
-            font-size: .78rem
-        }
-
-        .table-wrap {
-            overflow: auto
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-            padding: 12px
-        }
-
-        thead th {
-            font-size: .8rem;
-            color: var(--muted);
-            text-align: left;
-            font-weight: 600;
-            padding: 0 12px;
-            white-space: nowrap
-        }
-
-        tbody tr {
-            background: #0b1226;
-            border: 1px solid rgba(255, 255, 255, .06)
-        }
-
-        tbody td {
-            padding: 12px;
-            border-top: 1px solid rgba(255, 255, 255, .06);
-            border-bottom: 1px solid rgba(255, 255, 255, .06);
-            vertical-align: top
-        }
-
-        tbody td:first-child {
-            border-left: 1px solid rgba(255, 255, 255, .06);
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px
-        }
-
-        tbody td:last-child {
-            border-right: 1px solid rgba(255, 255, 255, .06);
-            border-top-right-radius: 12px;
-            border-bottom-right-radius: 12px
-        }
-
-        .actions {
+        .links {
             display: flex;
             gap: 8px;
             align-items: center;
-            flex-wrap: wrap
         }
 
-        button,
-        .btn {
-            border: 0;
-            cursor: pointer;
-            border-radius: 12px;
-            padding: 10px 14px;
-            font-weight: 700
-        }
-
-        .btn {
+        a.btn {
             display: inline-block;
-            text-decoration: none
+            text-decoration: none;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: .9rem;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #03222c;
         }
 
         .btn-secondary {
             background: #0b1226;
             color: var(--text);
-            border: 1px solid rgba(255, 255, 255, .15)
+            border: 1px solid rgba(255, 255, 255, .15);
         }
 
         .btn-danger {
             background: var(--danger);
-            color: #fff
+            color: #fff;
+            border: 0;
         }
 
-        .btn-small {
-            padding: 6px 10px;
-            font-weight: 600;
-            border-radius: 10px
-        }
-
-        .empty {
-            text-align: center;
-            color: var(--muted);
-            padding: 20px;
-            border-top: 1px dashed rgba(255, 255, 255, .18)
-        }
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            z-index: 999
-        }
-
-        .modal.open {
-            display: flex
-        }
-
-        .modal-card {
+        .table-wrapper {
             width: 100%;
-            max-width: 540px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(0, 0, 0, .18));
-            border: 1px solid rgba(255, 255, 255, .12);
-            border-radius: 18px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, .5);
-            padding: 16px
+            overflow-x: auto;
         }
 
-        .modal-card h2 {
-            margin: 0 0 8px;
-            font-size: 1.05rem
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
         }
 
-        .modal-grid {
+        thead {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        th,
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        .pill-tema {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            font-size: 0.75rem;
+            color: #a5f3fc;
+        }
+
+        .pill-escola {
+            font-size: 0.8rem;
+            color: #e5e7eb;
+        }
+
+        .col-small {
+            width: 1%;
+            white-space: nowrap;
+        }
+
+        .badge-empty {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        .actions-cell button {
+            border-radius: 10px;
+            border: 0;
+            padding: 6px 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 4px;
+        }
+
+        .actions-cell .edit {
+            background: rgba(34, 197, 94, .1);
+            color: #6ee7b7;
+            border: 1px solid rgba(34, 197, 94, .4);
+        }
+
+        .actions-cell .delete {
+            background: rgba(239, 68, 68, .1);
+            color: #fecaca;
+            border: 1px solid rgba(239, 68, 68, .4);
+        }
+
+        .grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px
+            gap: 12px;
+            grid-template-columns: repeat(12, 1fr);
         }
 
-        .field {
-            display: grid;
-            gap: 6px
+        .col-6 {
+            grid-column: span 6;
         }
 
-        .field label {
-            font-size: .85rem;
-            color: var(--muted)
+        .col-3 {
+            grid-column: span 3;
         }
 
-        .field input,
-        .field textarea {
+        .col-12 {
+            grid-column: span 12;
+        }
+
+        @media (max-width: 860px) {
+
+            .col-6,
+            .col-3 {
+                grid-column: span 12;
+            }
+        }
+
+        label {
+            display: block;
+            font-size: .88rem;
+            color: var(--muted);
+            margin: 2px 0 6px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
             background: #0b1226;
-            border: 1px solid rgba(255, 255, 255, .15);
+            border: 1px solid rgba(255, 255, 255, .1);
             color: var(--text);
             padding: 10px;
-            border-radius: 12px
+            border-radius: 12px;
+            outline: none;
+            font-size: 0.9rem;
         }
 
-        .modal-actions {
+        textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        .actions-form {
             display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 10px
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .ok {
+            display: none;
+            margin-top: 10px;
+            color: #10b981;
+            font-size: 0.88rem;
+        }
+
+        .empty-state {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            color: var(--muted);
         }
     </style>
 </head>
@@ -256,335 +258,291 @@
     <div class="container">
         <header>
             <h1>Resultados – Visitas e Apoio Presencial (Supervisor)</h1>
-            <div class="actions">
-                <a class="btn btn-secondary" href="./supervisao-form.html">Cadastrar novo</a>
-                <button id="printPage" class="btn-secondary">Imprimir</button>
-                <button id="exportCsv" class="btn-secondary">Exportar CSV (aba ativa)</button>
+            <div class="links">
+                <a class="btn btn-secondary" href="./supervisao-cadastro.html">← Voltar ao cadastro</a>
             </div>
         </header>
 
-        <section id="sec-visitas" class="card">
-            <div class="toolbar">
-                <div class="grow">
-                    <input id="v-search" type="search"
-                        placeholder="Filtrar por texto livre (supervisor, escola, tema, observações)…"
-                        aria-label="Filtro de busca" />
-                </div>
-
-                <select id="v-filterSupervisor" aria-label="Filtrar por supervisor">
-                    <option value="">Todos os supervisores</option>
-                </select>
-
-                <select id="v-filterTema" aria-label="Filtrar por tema">
-                    <option value="">Todos os temas</option>
-                </select>
-
-                <select id="v-filterSchool" aria-label="Filtrar por escola">
-                    <option value="">Todas as escolas</option>
-                </select>
-
-                <span id="v-counter" class="pill">0 registros</span>
+        <!-- LISTAGEM -->
+        <section class="card">
+            <h2 style="margin:0 0 12px;font-size:1rem">Registros lançados</h2>
+            <div id="estado-vazio" class="empty-state" style="display:none">
+                Nenhum registro encontrado. Volte ao cadastro para lançar a primeira visita. 🙂
             </div>
-
-            <div class="table-wrap">
-                <table aria-describedby="v-counter">
+            <div class="table-wrapper">
+                <table id="tabela-visitas">
                     <thead>
                         <tr>
                             <th>Data</th>
-                            <th>Mês</th>
-                            <th>Supervisor</th>
                             <th>Escola</th>
+                            <th>Supervisor</th>
                             <th>Tema</th>
                             <th>Observações</th>
-                            <th>Ações</th>
+                            <th class="col-small">Ações</th>
                         </tr>
                     </thead>
-                    <tbody id="v-tbody"></tbody>
+                    <tbody>
+                        <!-- preenchido via JS -->
+                    </tbody>
                 </table>
-                <div id="v-empty" class="empty">Nenhum registro encontrado.</div>
             </div>
+        </section>
+
+        <!-- EDIÇÃO -->
+        <section id="card-edicao" class="card card--hidden" aria-labelledby="titulo-edicao">
+            <h2 id="titulo-edicao" style="margin:0 0 12px;font-size:1rem">Editar registro</h2>
+            <form id="form-edicao">
+                <input type="hidden" id="edit-id" name="id" />
+                <div class="grid">
+                    <div class="col-6">
+                        <label for="edit-supervisor">Supervisor</label>
+                        <input id="edit-supervisor" name="supervisor_nome" type="text" required />
+                    </div>
+                    <div class="col-3">
+                        <label for="edit-data">Data</label>
+                        <input id="edit-data" name="data_visita" type="date" required />
+                    </div>
+                    <div class="col-3">
+                        <label for="edit-escola">Escola</label>
+                        <input id="edit-escola" name="escola" type="text" required />
+                    </div>
+                    <div class="col-12">
+                        <label for="edit-tema">Tema</label>
+                        <input id="edit-tema" name="tema" type="text" required />
+                    </div>
+                    <div class="col-12">
+                        <label for="edit-obs">Observações (opcional)</label>
+                        <textarea id="edit-obs" name="observacoes"></textarea>
+                    </div>
+                </div>
+                <div class="actions-form">
+                    <button type="submit" class="btn-primary">Salvar alterações</button>
+                    <button type="button" id="btn-cancelar-edicao" class="btn-secondary">Cancelar</button>
+                </div>
+                <p class="ok" id="ok-edicao">✓ Registro atualizado com sucesso.</p>
+            </form>
         </section>
     </div>
 
-    
-    <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
-        <div class="modal-card">
-            <h2 id="editTitle">Editar registro</h2>
-            <div class="modal-grid">
-                <div class="field"><label for="fData">Data</label><input id="fData" type="date" /></div>
-                <div class="field"><label for="fProf">Supervisor</label><input id="fProf" type="text" /></div>
-                <div class="field"><label for="fEscola">Escola</label><input id="fEscola" type="text" /></div>
-                <div class="field"><label for="fTema">Temas</label><input id="fTema" type="text" /></div>
-                <div class="field"><label for="fObs">Observações</label><textarea id="fObs" rows="4"></textarea></div>
-            </div>
-            <div class="modal-actions">
-                <button id="btnCancel" class="btn-secondary">Cancelar</button>
-                <button id="btnSave" class="btn-secondary">Salvar</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        
+        // ===== Supabase (mesmo projeto/tabela do formulário) =====
         const SUPABASE_URL = 'https://sfhxxkafubugqvaycnke.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmaHh4a2FmdWJ1Z3F2YXljbmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NTExMDEsImV4cCI6MjA3NzMyNzEwMX0.m7GJ-NVuouQsGdPTRGAx1bd6aPIP5-OWrdvoFTWSJU0';
-        const sbHeaders = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' };
 
-        async function sbSelectAll() {
-            const url = `${SUPABASE_URL}/rest/v1/supervisor_submissions?select=id,supervisor_nome,escola,data_visita,tema,observacoes&order=created_at.desc`;
-            const r = await fetch(url, { headers: sbHeaders });
-            if (!r.ok) throw new Error(`SELECT falhou: HTTP ${r.status}`);
-            return r.json();
-        }
-        async function sbDelete(id) {
-            const url = `${SUPABASE_URL}/rest/v1/supervisor_submissions?id=eq.${encodeURIComponent(id)}`;
-            const r = await fetch(url, { method: 'DELETE', headers: sbHeaders });
-            if (!r.ok) throw new Error(`DELETE falhou: HTTP ${r.status}`);
-        }
-        async function sbUpdate(id, payload) {
-            const url = `${SUPABASE_URL}/rest/v1/supervisor_submissions?id=eq.${encodeURIComponent(id)}`;
-            const r = await fetch(url, { method: 'PATCH', headers: { ...sbHeaders, Prefer: 'return=representation' }, body: JSON.stringify(payload) });
-            const txt = await r.text(); let json = null; try { json = txt ? JSON.parse(txt) : null } catch { }
-            if (!r.ok) throw new Error(json?.message || txt || `PATCH falhou: HTTP ${r.status}`);
-            return json?.[0] || null;
-        }
-
-        /* ===== Util ===== */
-        const $ = (s, sc = document) => sc.querySelector(s);
-        const $$ = (s, sc = document) => Array.from(sc.querySelectorAll(s));
-        const save = (k, d) => localStorage.setItem(k, JSON.stringify(d));
-        const load = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f } catch { return f } };
-        const PT_BR_MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-        const fmt = {
-            date(iso) { if (!iso) return ""; const d = new Date(iso + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(); },
-            month(iso) { if (!iso) return ""; return PT_BR_MESES[new Date(iso + 'T00:00:00').getMonth()]; }
+        const headersBase = {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`
         };
-        const K_VISITAS = 'supervisor-registros-v1';
 
-     
-        async function syncFromSupabase() {
-            const rows = await sbSelectAll();
-            const items = rows.map(r => ({
-                id: crypto?.randomUUID?.() || `id-${Math.random().toString(16).slice(2)}`,
-                db_id: r.id,
-                data: r.data_visita || '',
-                professores: r.supervisor_nome || '',
-                escola: r.escola || '',
-                tema: r.tema || '',
-                obs: r.observacoes || ''
-            }));
-            save(K_VISITAS, { items });
+        let registros = [];
+
+        function formatarData(iso) {
+            if (!iso) return '';
+            // pode vir como '2025-11-26' ou '2025-11-26T00:00:00'
+            const s = iso.toString().slice(0, 10);
+            const [y, m, d] = s.split('-');
+            if (!y || !m || !d) return iso;
+            return `${d}/${m}/${y}`;
         }
 
-        /* ===== Modal edição ===== */
-        const modal = $('#editModal'); const fData = $('#fData'), fProf = $('#fProf'), fEscola = $('#fEscola'), fTema = $('#fTema'), fObs = $('#fObs');
-        const btnCancel = $('#btnCancel'), btnSave = $('#btnSave'); let modalCtx = null;
-
-        function openEdit(storageKey, index) {
-            const state = load(storageKey, { items: [] }); const it = state.items[index] || {};
-            fData.value = it.data || ''; fProf.value = it.professores || ''; fEscola.value = it.escola || ''; fTema.value = it.tema || ''; fObs.value = it.obs || '';
-            modalCtx = { storageKey, index, original: it }; modal.classList.add('open');
-        }
-        function closeEdit() { modal.classList.remove('open'); modalCtx = null; }
-        btnCancel.addEventListener('click', closeEdit);
-        modal.addEventListener('click', e => { if (e.target === modal) closeEdit(); });
-
-        btnSave.addEventListener('click', async () => {
-            if (!modalCtx) return;
-            const { storageKey, index } = modalCtx;
-            const state = load(storageKey, { items: [] });
-            const dval = (fData.value || '').trim();
-            if (dval && !/^\d{4}-\d{2}-\d{2}$/.test(dval)) { alert('Data inválida. Use YYYY-MM-DD.'); return; }
-            const updated = {
-                ...(state.items[index] || {}),
-                data: dval || '', professores: fProf.value || '', escola: fEscola.value || '', tema: fTema.value || '', obs: fObs.value || ''
-            };
+        async function carregarRegistros() {
+            const tbody = document.querySelector('#tabela-visitas tbody');
+            const vazio = document.getElementById('estado-vazio');
+            tbody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
 
             try {
-                if (updated.db_id) {
-                    await sbUpdate(updated.db_id, {
-                        data_visita: updated.data || null,
-                        supervisor_nome: updated.professores || null,
-                        escola: updated.escola || null,
-                        tema: updated.tema || null,
-                        observacoes: updated.obs || null
-                    });
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/supervisor_submissions?select=*&order=data_visita.desc,created_at.desc`,
+                    { headers: headersBase }
+                );
+
+                const text = await res.text();
+                let json;
+                try { json = text ? JSON.parse(text) : []; } catch { json = []; }
+
+                if (!res.ok) {
+                    console.error('Erro ao carregar:', text);
+                    tbody.innerHTML = `<tr><td colspan="6">Erro ao carregar registros.</td></tr>`;
+                    return;
                 }
-            } catch (err) { alert('Falha ao salvar no banco: ' + err.message); return; }
 
-            state.items[index] = updated; save(storageKey, state); mod.render(); closeEdit();
-        });
-
-        
-        function createReadModule(storageKey) {
-            const els = {
-                search: $('#v-search'),
-                filterSupervisor: $('#v-filterSupervisor'),
-                filterTema: $('#v-filterTema'),
-                filterSchool: $('#v-filterSchool'),
-                counter: $('#v-counter'),
-                tbody: $('#v-tbody'),
-                empty: $('#v-empty')
-            };
-
-            function getState() { return load(storageKey, { items: [] }); }
-
-            function uniqueSorted(values) {
-                return [...new Set(values.map(v => (v || '').trim()).filter(Boolean))]
-                    .sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+                registros = json || [];
+                renderizarTabela();
+                vazio.style.display = registros.length === 0 ? 'block' : 'none';
+            } catch (err) {
+                console.error(err);
+                tbody.innerHTML = `<tr><td colspan="6">Erro de conexão ao carregar registros.</td></tr>`;
             }
-
-            function refreshSupervisorFilter(state) {
-                const selected = els.filterSupervisor.value;
-                els.filterSupervisor.innerHTML = '<option value="">Todos os supervisores</option>';
-                uniqueSorted(state.items.map(x => x.professores)).forEach(nome => {
-                    const o = document.createElement('option'); o.value = nome; o.textContent = nome;
-                    els.filterSupervisor.appendChild(o);
-                });
-                if (selected) els.filterSupervisor.value = selected;
-            }
-
-            function refreshTemaFilter(state) {
-                const selected = els.filterTema.value;
-                els.filterTema.innerHTML = '<option value="">Todos os temas</option>';
-                uniqueSorted(state.items.map(x => x.tema)).forEach(t => {
-                    const o = document.createElement('option'); o.value = t; o.textContent = t;
-                    els.filterTema.appendChild(o);
-                });
-                if (selected) els.filterTema.value = selected;
-            }
-
-            function refreshSchoolFilter(state) {
-                const selected = els.filterSchool.value;
-                els.filterSchool.innerHTML = '<option value="">Todas as escolas</option>';
-                uniqueSorted(state.items.map(x => x.escola)).forEach(es => {
-                    const o = document.createElement('option'); o.value = es; o.textContent = es;
-                    els.filterSchool.appendChild(o);
-                });
-                if (selected) els.filterSchool.value = selected;
-            }
-
-            function initFilters(state) {
-                refreshSupervisorFilter(state);
-                refreshTemaFilter(state);
-                refreshSchoolFilter(state);
-            }
-
-            function escapeHtml(s) {
-                return String(s)
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/\"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
-            }
-
-            function render() {
-                const state = getState();
-                initFilters(state);
-
-                const q = (els.search.value || '').trim().toLowerCase();
-                const sup = (els.filterSupervisor.value || '').trim();
-                const tema = (els.filterTema.value || '').trim();
-                const es = (els.filterSchool.value || '').trim();
-
-                const rows = state.items
-                    .map((it, idx) => ({ it, idx }))
-                    .filter(({ it }) => {
-                        const matchesText = !q || [it.professores, it.escola, it.tema, it.obs]
-                            .join(' ').toLowerCase().includes(q);
-
-                        const supOk = !sup || it.professores === sup;
-                        const temaOk = !tema || it.tema === tema;
-                        const esOk = !es || it.escola === es;
-
-                        return matchesText && supOk && temaOk && esOk;
-                    })
-                    .sort((a, b) => (a.it.data || '').localeCompare(b.it.data || ''));
-
-                els.tbody.innerHTML = '';
-                rows.forEach(({ it, idx }) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><span class="pill">${fmt.date(it.data)}</span></td>
-                        <td>${fmt.month(it.data)}</td>
-                        <td>${escapeHtml(it.professores || '')}</td>
-                        <td>${escapeHtml(it.escola || '')}</td>
-                        <td>${escapeHtml(it.tema || '')}</td>
-                        <td>${escapeHtml(it.obs || '')}</td>
-                        <td>
-                          <div class="actions">
-                            <button class="btn-small btn-secondary" data-cmd="edit" data-index="${idx}">Editar</button>
-                            <button class="btn-small btn-danger" data-cmd="del" data-index="${idx}">Excluir</button>
-                          </div>
-                        </td>`;
-                    els.tbody.appendChild(tr);
-                });
-
-                els.empty.style.display = rows.length ? 'none' : 'block';
-                els.counter.textContent = `${rows.length} registros`;
-               
-                refreshSupervisorFilter(state);
-                refreshTemaFilter(state);
-                refreshSchoolFilter(state);
-            }
-
-            
-            els.search.addEventListener('input', render);
-            els.filterSupervisor.addEventListener('change', render);
-            els.filterTema.addEventListener('change', render);
-            els.filterSchool.addEventListener('change', render);
-
-            return { render, getState };
         }
 
-        // Boot
-        let mod;
-        (async function init() {
-            try { await syncFromSupabase(); } catch (e) { console.error('Sync erro:', e); }
-            mod = createReadModule(K_VISITAS);
-            mod.render();
-        })();
+        function renderizarTabela() {
+            const tbody = document.querySelector('#tabela-visitas tbody');
+            tbody.innerHTML = '';
 
-      
-        document.getElementById('exportCsv').addEventListener('click', () => {
-            if (!mod) return;
-            const state = load(K_VISITAS, { items: [] });
+            if (!registros.length) {
+                tbody.innerHTML = '<tr><td colspan="6">Nenhum registro encontrado.</td></tr>';
+                return;
+            }
 
-            
-            const q = (document.getElementById('v-search').value || '').trim().toLowerCase();
-            const sup = (document.getElementById('v-filterSupervisor').value || '').trim();
-            const tema = (document.getElementById('v-filterTema').value || '').trim();
-            const es = (document.getElementById('v-filterSchool').value || '').trim();
+            for (const r of registros) {
+                const tr = document.createElement('tr');
+                tr.dataset.id = r.id;
 
-            const filtered = state.items
-                .filter(it => {
-                    const matchesText = !q || [it.professores, it.escola, it.tema, it.obs]
-                        .join(' ').toLowerCase().includes(q);
-                    const supOk = !sup || it.professores === sup;
-                    const temaOk = !tema || it.tema === tema;
-                    const esOk = !es || it.escola === es;
-                    return matchesText && supOk && temaOk && esOk;
-                })
-                .sort((a, b) => (a.data || '').localeCompare(b.data || ''));
+                tr.innerHTML = `
+          <td>${formatarData(r.data_visita)}</td>
+          <td><span class="pill-escola">${r.escola || ''}</span></td>
+          <td>${r.supervisor_nome || ''}</td>
+          <td>
+            ${r.tema ? `<span class="pill-tema">${r.tema}</span>` : '<span class="badge-empty">Sem tema</span>'}
+          </td>
+          <td>
+            ${r.observacoes ? r.observacoes.replace(/\n/g, '<br>') : '<span class="badge-empty">Sem observações</span>'}
+          </td>
+          <td class="actions-cell col-small">
+            <button type="button" class="edit" data-action="edit">Editar</button>
+            <button type="button" class="delete" data-action="delete">Excluir</button>
+          </td>
+        `;
 
-            if (!filtered.length) { alert('Não há dados para exportar.'); return; }
+                tbody.appendChild(tr);
+            }
+        }
 
-            const headers = ['Data', 'Mês', 'Supervisor', 'Escola', 'Tema', 'Observações'];
-            const rows = filtered.map(it => [
-                (it.data ? (() => { const d = new Date(it.data + 'T00:00:00'); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() })() : ''),
-                (it.data ? PT_BR_MESES[new Date(it.data + 'T00:00:00').getMonth()] : ''),
-                it.professores || '', it.escola || '', it.tema || '', it.obs || ''
-            ]);
-            const csv = [headers, ...rows].map(r => r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(',')).join('\n');
-            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'supervisor-registros.csv'; a.click(); URL.revokeObjectURL(url);
+        function abrirEdicao(id) {
+            const registro = registros.find(r => String(r.id) === String(id));
+            if (!registro) return;
+
+            document.getElementById('edit-id').value = registro.id;
+            document.getElementById('edit-supervisor').value = registro.supervisor_nome || '';
+            document.getElementById('edit-escola').value = registro.escola || '';
+            document.getElementById('edit-data').value = (registro.data_visita || '').toString().slice(0, 10);
+            document.getElementById('edit-tema').value = registro.tema || '';
+            document.getElementById('edit-obs').value = registro.observacoes || '';
+
+            const cardEdicao = document.getElementById('card-edicao');
+            cardEdicao.classList.remove('card--hidden');
+            cardEdicao.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function fecharEdicao() {
+            const cardEdicao = document.getElementById('card-edicao');
+            cardEdicao.classList.add('card--hidden');
+        }
+
+        async function salvarEdicao(ev) {
+            ev.preventDefault();
+            const okMsg = document.getElementById('ok-edicao');
+
+            const id = document.getElementById('edit-id').value;
+            const supervisor_nome = document.getElementById('edit-supervisor').value.trim();
+            const escola = document.getElementById('edit-escola').value.trim();
+            const data_visita = document.getElementById('edit-data').value;
+            const tema = document.getElementById('edit-tema').value.trim();
+            const observacoes = document.getElementById('edit-obs').value.trim() || null;
+
+            const payload = { supervisor_nome, escola, data_visita, tema, observacoes };
+
+            try {
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/supervisor_submissions?id=eq.${encodeURIComponent(id)}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            ...headersBase,
+                            'Content-Type': 'application/json',
+                            Prefer: 'return=representation'
+                        },
+                        body: JSON.stringify(payload)
+                    }
+                );
+
+                const text = await res.text();
+                let json;
+                try { json = text ? JSON.parse(text) : null; } catch { }
+
+                if (!res.ok) {
+                    console.error('Erro update:', text);
+                    alert('Falha ao atualizar registro: ' + (json?.message || text || res.status));
+                    return;
+                }
+
+                okMsg.style.display = 'block';
+                setTimeout(() => okMsg.style.display = 'none', 3000);
+
+                // recarrega lista para refletir alterações
+                await carregarRegistros();
+                fecharEdicao();
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão ao atualizar registro.');
+            }
+        }
+
+        async function excluirRegistro(id) {
+            const confirmar = confirm('Tem certeza que deseja excluir este registro?');
+            if (!confirmar) return;
+
+            try {
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/supervisor_submissions?id=eq.${encodeURIComponent(id)}`,
+                    {
+                        method: 'DELETE',
+                        headers: headersBase
+                    }
+                );
+
+                const text = await res.text();
+                let json;
+                try { json = text ? JSON.parse(text) : null; } catch { }
+
+                if (!res.ok) {
+                    console.error('Erro delete:', text);
+                    alert('Falha ao excluir registro: ' + (json?.message || text || res.status));
+                    return;
+                }
+
+                // remove do array local e atualiza a tabela
+                registros = registros.filter(r => String(r.id) !== String(id));
+                renderizarTabela();
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão ao excluir registro.');
+            }
+        }
+
+        function wireEventos() {
+            const tbody = document.querySelector('#tabela-visitas tbody');
+            tbody.addEventListener('click', (ev) => {
+                const btn = ev.target;
+                if (!(btn instanceof HTMLElement)) return;
+
+                const action = btn.dataset.action;
+                if (!action) return;
+
+                const tr = btn.closest('tr');
+                if (!tr) return;
+                const id = tr.dataset.id;
+                if (!id) return;
+
+                if (action === 'edit') {
+                    abrirEdicao(id);
+                } else if (action === 'delete') {
+                    excluirRegistro(id);
+                }
+            });
+
+            const formEdicao = document.getElementById('form-edicao');
+            formEdicao.addEventListener('submit', salvarEdicao);
+
+            const btnCancelar = document.getElementById('btn-cancelar-edicao');
+            btnCancelar.addEventListener('click', fecharEdicao);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            wireEventos();
+            carregarRegistros();
         });
-
-        document.getElementById('printPage').addEventListener('click', () => window.print());
     </script>
 </body>
 
 </html>
-
-
