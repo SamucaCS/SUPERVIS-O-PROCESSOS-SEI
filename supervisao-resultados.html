@@ -251,6 +251,42 @@
             font-size: 0.9rem;
             color: var(--muted);
         }
+
+        /* ===== FILTRO DE SUPERVISOR ===== */
+        .filtro {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.45);
+        }
+
+        .filtro-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .filtro-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filtro-row input {
+            flex: 1 1 220px;
+        }
+
+        .filtro-info {
+            margin-top: 6px;
+            font-size: 0.78rem;
+            color: #7dd3fc;
+        }
+
+        .filtro-info strong {
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -266,9 +302,25 @@
         <!-- LISTAGEM -->
         <section class="card">
             <h2 style="margin:0 0 12px;font-size:1rem">Registros lançados</h2>
+
+            <!-- FILTRO POR SUPERVISOR -->
+            <div class="filtro">
+                <div class="filtro-label">Filtrar por nome de supervisor</div>
+                <div class="filtro-row">
+                    <input id="filtro-supervisor" type="text"
+                        placeholder="Digite o nome do supervisor, ex.: Ana, João..." />
+                    <button type="button" id="btn-limpar-filtro" class="btn-secondary"
+                        style="padding:8px 12px;font-size:0.8rem;">
+                        Limpar filtro
+                    </button>
+                </div>
+                <p id="filtro-info" class="filtro-info"></p>
+            </div>
+
             <div id="estado-vazio" class="empty-state" style="display:none">
                 Nenhum registro encontrado. Volte ao cadastro para lançar a primeira visita. 🙂
             </div>
+
             <div class="table-wrapper">
                 <table id="tabela-visitas">
                     <thead>
@@ -335,10 +387,10 @@
         };
 
         let registros = [];
+        let filtroSupervisor = '';
 
         function formatarData(iso) {
             if (!iso) return '';
-            // pode vir como '2025-11-26' ou '2025-11-26T00:00:00'
             const s = iso.toString().slice(0, 10);
             const [y, m, d] = s.split('-');
             if (!y || !m || !d) return iso;
@@ -375,16 +427,27 @@
             }
         }
 
+        function obterListaFiltrada() {
+            if (!filtroSupervisor) return registros;
+
+            const termo = filtroSupervisor.toLowerCase();
+            return registros.filter(r =>
+                (r.supervisor_nome || '').toLowerCase().includes(termo)
+            );
+        }
+
         function renderizarTabela() {
             const tbody = document.querySelector('#tabela-visitas tbody');
             tbody.innerHTML = '';
 
-            if (!registros.length) {
-                tbody.innerHTML = '<tr><td colspan="6">Nenhum registro encontrado.</td></tr>';
+            const lista = obterListaFiltrada();
+
+            if (!lista.length) {
+                tbody.innerHTML = '<tr><td colspan="6">Nenhum registro encontrado para esse filtro.</td></tr>';
                 return;
             }
 
-            for (const r of registros) {
+            for (const r of lista) {
                 const tr = document.createElement('tr');
                 tr.dataset.id = r.id;
 
@@ -405,6 +468,15 @@
         `;
 
                 tbody.appendChild(tr);
+            }
+        }
+
+        function atualizarInfoFiltro() {
+            const info = document.getElementById('filtro-info');
+            if (filtroSupervisor) {
+                info.innerHTML = `Mostrando apenas registros cujo supervisor contém: <strong>"${filtroSupervisor}"</strong>.`;
+            } else {
+                info.textContent = '';
             }
         }
 
@@ -469,7 +541,6 @@
                 okMsg.style.display = 'block';
                 setTimeout(() => okMsg.style.display = 'none', 3000);
 
-                // recarrega lista para refletir alterações
                 await carregarRegistros();
                 fecharEdicao();
             } catch (err) {
@@ -501,7 +572,6 @@
                     return;
                 }
 
-                // remove do array local e atualiza a tabela
                 registros = registros.filter(r => String(r.id) !== String(id));
                 renderizarTabela();
             } catch (err) {
@@ -536,6 +606,23 @@
 
             const btnCancelar = document.getElementById('btn-cancelar-edicao');
             btnCancelar.addEventListener('click', fecharEdicao);
+
+            // Filtro de supervisor
+            const inputFiltro = document.getElementById('filtro-supervisor');
+            const btnLimparFiltro = document.getElementById('btn-limpar-filtro');
+
+            inputFiltro.addEventListener('input', () => {
+                filtroSupervisor = inputFiltro.value.trim();
+                renderizarTabela();
+                atualizarInfoFiltro();
+            });
+
+            btnLimparFiltro.addEventListener('click', () => {
+                filtroSupervisor = '';
+                inputFiltro.value = '';
+                renderizarTabela();
+                atualizarInfoFiltro();
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
