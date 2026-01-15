@@ -170,21 +170,43 @@
       </div>
     </header>
 
-    
     <section class="card" aria-labelledby="titulo-visitas">
       <form id="form-visitas">
         <h2 id="titulo-visitas" style="margin:0 0 8px;font-size:1rem">Nova visita/apoio</h2>
         <div class="grid">
+
           <div class="col-6">
             <label for="v-prof">Supervisor</label>
-            <input id="v-prof" name="supervisor_nome" type="text" placeholder="Ex.: Ana Silva" required />
+            <select id="v-prof" name="supervisor_nome" required
+              style="width:100%;background:#0b1226;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px;border-radius:12px;outline:none">
+              <option value="" disabled selected>Selecione o supervisor...</option>
+              <option>Carla de Almeida Leite</option>
+              <option>Cintia Souza Borges</option>
+              <option>Edson Fernandes de Oliveira</option>
+              <option>Elaine Ferreira Cunha</option>
+              <option>Elisabete Gomes Benatti</option>
+              <option>Elizabeth das Neves Alves Pereira</option>
+              <option>Gisele Gonçalves Callado</option>
+              <option>Jani Aparecida de Lima Ramos</option>
+              <option>José Odair Ribeiro</option>
+              <option>Lethycia Regina Rodrigues</option>
+              <option>Mara Silvia Bioto</option>
+              <option>Mirela de Oliveira Roman</option>
+              <option>Mirian Miya</option>
+              <option>Núbia Ferreira de Melo</option>
+              <option>Patrícia Ferreira</option>
+              <option>Patrícia Martins Seabra</option>
+              <option>Raquel Tegedor Azevedo</option>
+              <option>Reni Gomes Pereira</option>
+            </select>
           </div>
+
           <div class="col-3">
             <label for="v-data">Data</label>
             <input id="v-data" name="data_visita" type="date" required />
           </div>
           <div class="col-3">
-            <label for="v-escola">Escolas</label>
+            <label for="v-escola">Escola</label>
             <select id="v-escola" name="escola" required
               style="width:100%;background:#0b1226;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px;border-radius:12px;outline:none">
               <option value="" disabled selected>Selecione a escola…</option>
@@ -251,55 +273,55 @@
               <option>ZEIKICHI FUKUOKA</option>
               <option>ZELIA GATTAI AMADO</option>
             </select>
-        </div>
-        <div class="col-12">
-          <label for="v-tema">Tema</label>
-          <select id="v-tema" name="tema" required
-            style="width:100%;background:#0b1226;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px;border-radius:12px;outline:none">
-            <option value="" disabled selected>Selecione um tema…</option>
-            <option>ALUNO PRESENTE - BUSCA ATIVA</option>
-            <option>PLATAFORMAS EDUCACIONAIS</option>
-            <option>APOIO PRESENCIAL</option>
-            <option>JORNADA 90 DIAS</option>
-            <option>SAEB</option>
-            <option>PROVA PAULISTA</option>
-            <option>CONVIVA</option>
-            <option>FORMAÇÃO</option>
-            <option>PLANEJAMENTO DE AULA</option>
-            <option>EDUCAÇÃO ESPECIAL</option>
-            <option>EDUCAÇÃO PROFISSIONAL</option>
-            <option>PROGRAMA DE ENSINO INTEGRAL</option>
-            <option>ATPC</option>
-            <option>MERENDA/COZINHA/ESTOQUE / BAIXA DIÁRIA</option>
-            <option>HORÁRIO ADMINISTRATIVO / LIVRO PONTO DOCENTE E ADMINISTRATIVO</option>
-            <option>APM / PRESTAÇÕES DE CONTAS / CONSELHO DE ESCOLA</option>
-            <option>INVENTÁRIO/INSERVÍVEL</option>
-            <option>ACDA</option>
-            <option>Grêmio Estudantil</option>
-            <option>Especificidades da PEI</option>
-            <option>Prontuários de concluintes</option>
-            <option>SARESP</option>
-          </select>
-        </div>
+          </div>
+          <div class="col-12">
+            <label for="v-tema">Tema</label>
+            <select id="v-tema" name="tema" required
+              style="width:100%;background:#0b1226;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px;border-radius:12px;outline:none">
+              <option value="" disabled selected>Selecione um tema…</option>
+              <option>ALUNO PRESENTE - BUSCA ATIVA</option>
+              <option>PLATAFORMAS EDUCACIONAIS</option>
+              <option>APOIO PRESENCIAL</option>
+              <option>JORNADA 90 DIAS</option>
+              <option>SAEB</option>
+              <option>PROVA PAULISTA</option>
+              <option>CONVIVA</option>
+              <option>FORMAÇÃO</option>
+              <option>PLANEJAMENTO DE AULA</option>
+              <option>EDUCAÇÃO ESPECIAL</option>
+              <option>EDUCAÇÃO PROFISSIONAL</option>
+              <option>PROGRAMA DE ENSINO INTEGRAL</option>
+              <option>ATPC</option>
+              <option>MERENDA/COZINHA/ESTOQUE / BAIXA DIÁRIA</option>
+              <option>HORÁRIO ADMINISTRATIVO / LIVRO PONTO DOCENTE E ADMINISTRATIVO</option>
+              <option>APM / PRESTAÇÕES DE CONTAS / CONSELHO DE ESCOLA</option>
+              <option>INVENTÁRIO/INSERVÍVEL</option>
+              <option>ACDA</option>
+              <option>Grêmio Estudantil</option>
+              <option>Especificidades da PEI</option>
+              <option>Prontuários de concluintes</option>
+              <option>SARESP</option>
+            </select>
+          </div>
 
-        <div class="col-12">
-          <label for="v-obs">Observações (opcional)</label>
-          <textarea id="v-obs" name="observacoes" placeholder="Registre detalhes, encaminhamentos etc."></textarea>
+          <div class="col-12">
+            <label for="v-obs">Observações (opcional)</label>
+            <textarea id="v-obs" name="observacoes" placeholder="Registre detalhes, encaminhamentos etc."></textarea>
+          </div>
         </div>
-  </div>
-  <div class="actions">
-    <button type="submit" class="btn-primary">Adicionar</button>
-    <button type="reset" class="btn-secondary">Limpar</button>
-  </div>
-  <p class="ok" id="ok-visitas">✓ Registro salvo.
-    <a id="ok-link-visitas" class="btn btn-secondary" href="./supervisao-resultados.html">Ver resultados</a>
-  </p>
-  </form>
-  </section>
+        <div class="actions">
+          <button type="submit" class="btn-primary">Adicionar</button>
+          <button type="reset" class="btn-secondary">Limpar</button>
+        </div>
+        <p class="ok" id="ok-visitas">✓ Registro salvo.
+          <a id="ok-link-visitas" class="btn btn-secondary" href="./supervisao-resultados.html">Ver resultados</a>
+        </p>
+      </form>
+    </section>
   </div>
 
   <script>
-    
+    // ==== Supabase (PROJETO NOVO) ====
     const SUPABASE_URL = 'https://sfhxxkafubugqvaycnke.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmaHh4a2FmdWJ1Z3F2YXljbmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3NTExMDEsImV4cCI6MjA3NzMyNzEwMX0.m7GJ-NVuouQsGdPTRGAx1bd6aPIP5-OWrdvoFTWSJU0';
 
@@ -354,4 +376,3 @@
 </body>
 
 </html>
-
